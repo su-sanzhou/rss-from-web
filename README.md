@@ -49,11 +49,11 @@ lsof -i | grep python
 if you see listen 8000,congratulations,it's working
 visit "http://localhost:8000/rss-from-web",input user_name:admin and password:password
 you will see the home page,it looks like this:
-![image]()
+![image](https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_001.png)
 
 # 5.usage
 click the "Add a rss" on the right up corner,then you could add something like this:
-![image]()
+![image](https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_002.png)
 
 you can copy all the xpath css here:
 ```
@@ -77,7 +77,7 @@ False
 ```
 
 then click the save button,you will see the rss source,like this:
-![image]()
+![image](https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_003.png)
 
 then you can use your rss reader subscribe it.
 
