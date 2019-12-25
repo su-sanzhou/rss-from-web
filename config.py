@@ -27,8 +27,8 @@ def get_other_config():
         # the same with nginx proxy loation
         "home_uri": "/rss-from-web/",
         #the url prefix when visit the rss
-        "absolute_uri_prefix": "https://sanzhou.live/rss-from-web/",
-        "rss_site_uri": "https://sanzhou.live/",
+        "absolute_uri_prefix": "http://localhost:8000/rss-from-web/",
+        "rss_site_uri": "http://localost:8000/",
         "refresh_interval": 12 * 60 #minutes
     }
     return other_settings
