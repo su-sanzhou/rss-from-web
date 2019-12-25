@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--meta http-equiv="X-UA-Compatible" content="ie=edge"-->
+	<!--meta http-equiv="content-type" content="application/x-www-form-urlencoded"-->
+	<!--meta contentType="application/x-www-form-urlencoded"-->
+  <title>Rss from web </title>
+  <link rel="stylesheet" href="{{static_url("bulma.min.css")}}" />
+  <link rel="stylesheet" href="{{static_url("rss-from-web.css")}}" />
+
+  <!--link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" /-->
+
+  <link rel="stylesheet" href="{{static_url("font-awesome.min.css")}}" />
+
+  <!--link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"-->
+  <!--link rel="stylesheet" href="/static/css/bulma-divider.min.css"-->
+
+  <style>
+    nav.navbar {
+      height: 6rem !important;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+    }
+  </style>
+  <script src="{{static_url("jquery-3.4.1.min.js")}}"></script>
+  <script src="{{static_url("jquery_cookie.js")}}"></script>
+  <script>
+  $(document).ready(function(){
+    $(".delete_rss").click(function(){
+       $(this).parent().parent().hide();
+       $.ajaxSettings.async = false;
+       $.post("{{ request_uri }}delete_rss",
+         {url_name: $(this).parent().prev().attr("href"),
+          _xsrf: Cookies.get("_xsrf")},
+         function(data,status){
+            if(data == "do_success"){
+             console.log("come success");
+             //$(this).parent().parent().hide();
+           }
+           else{
+             console.log("come faileue")
+             alert("do not delete success!");
+           }
+         }
+       );
+       }
+    );
+
+
+
+  });
+  </script>
+</head>
+
+
+<body>
+  <!-- START NAV -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <a  class="navbar-item is-active is-size-5 has-text-weight-semibold" href="{{request_uri}}">
+		 <h1 class="title">Rss from web</h1>
+        </a>
+        <span class="navbar-burger burger" data-target="navbarMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </div>
+      <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-end">
+         <a  class="navbar-item " href="{{request_uri + "add_rss"}}">
+		 <h1 class="subtitle">Add a rss</h1>
+         </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!-- END NAV -->
+
+  <!-- input css -->
+  <section class="section">
+    <div class="columns">
+      <div class="column is-10 is-offset-1">
+        <div class="container has-text-centered is-fluid">
+          <div class="hero-body">
+
+            <h2 class="title is-4 has-text-left">Your rss from web</h1>
+
+              <div class="field">
+                {% for item in rss %}
+                    {% if item["site_title"] == "rss_is_none" %}
+                      <label class="label has-text-left" >
+					     There is no one rss item now!
+                      </label>
+                    {% elif  item["site_title"] == "no_site_title" %}
+                      <label class="label has-text-left" >
+                        <a href="{{item['rss_url_name']}}"  target="_blank">{{item["rss_url_name"]}}</a>
+                        <div class="button is-primary is-small is-rounded">
+                          <label class="delete_rss" >
+                            Delete
+                          </label>
+                        </div>
+                        <div class="button is-primary is-small is-rounded">
+                        <form method="post" action="{{ request_uri }}edit_rss" target="_blank">
+                            <input class="input" type="hidden"  name="url_name" value="{{item['rss_url_name']}}">
+                              <button class="button is-primary is-small is-rounded">
+                               Edit
+                              </button>
+                            {% raw xsrf_form_html() %}
+                        </form>
+                        </div>
+                     </label>
+                    {% else %}
+                     <label class="label has-text-left" >
+                        <a href="{{item['rss_url_name']}}" target="_blank">{{item["site_title"]}}</a>
+                        <div class="button is-primary is-small is-rounded">
+                          <label class="delete_rss" >
+                            Delete
+                          </label>
+                        </div>
+                        <div class="button is-primary is-small is-rounded">
+                        <form method="post" action="{{ request_uri }}edit_rss" target="_blank">
+                            <input class="input" type="hidden"  name="url_name" value="{{item['rss_url_name']}}">
+                              <button class="button is-primary is-small is-rounded">
+                               Edit
+                              </button>
+                            {% raw xsrf_form_html() %}
+                        </form>
+                        </div>
+
+                    </label>
+                    {% end %}
+              {% end %}
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong></strong>       
+			</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--meta http-equiv="X-UA-Compatible" content="ie=edge"-->
+	<!--meta http-equiv="content-type" content="application/x-www-form-urlencoded"-->
+	<!--meta contentType="application/x-www-form-urlencoded"-->
+  <title>Rss from web </title>
+  <link rel="stylesheet" href="{{static_url("bulma.min.css")}}" />
+  <link rel="stylesheet" href="{{static_url("rss-from-web.css")}}" />
+
+  <!--link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" /-->
+
+  <link rel="stylesheet" href="{{static_url("font-awesome.min.css")}}" />
+
+  <!--link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"-->
+  <!--link rel="stylesheet" href="/static/css/bulma-divider.min.css"-->
+
+  <style>
+    nav.navbar {
+      height: 6rem !important;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+    }
+  </style>
+
+</head>
+
+
+<body>
+  <!-- START NAV -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <a  class="navbar-item is-active is-size-5 has-text-weight-semibold" href="{{request_uri}}">
+		 <h1 class="title">Rss from web</h1>
+        </a>
+        <span class="navbar-burger burger" data-target="navbarMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </div>
+
+    </div>
+  </nav>
+  <!-- END NAV -->
+
+  <!-- input css -->
+  <section class="section">
+    <div class="columns">
+      <div class="column is-10 is-offset-1">
+        <div class="container has-text-centered is-fluid">
+          <div class="hero-body">
+              {% if res > 0 %}
+                  <h2 class="title is-4 has-text-left">Update success!</h1>
+              {% else %}
+                  <h2 class="title is-4 has-text-left">Something wrong happened!</h1>
+              {% end %}
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong></strong>
+			</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>

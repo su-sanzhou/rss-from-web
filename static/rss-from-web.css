@@ -1,0 +1,25 @@
+.hideSlow{
+    background: #a40808;
+      color: #fff;
+      animation: hidetip 5s 1;
+      animation-fill-mode: forwards;
+      -webkit-animation: showtip 5s 1;
+      -webkit-animation-fill-mode: forwards;
+}
+
+@keyframes hidetip {
+      from {
+        opcity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+			@-webkit-keyframes hidetip {
+      from {
+        opcity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+}

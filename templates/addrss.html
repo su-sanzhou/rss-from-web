@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--meta http-equiv="X-UA-Compatible" content="ie=edge"-->
+	<!--meta http-equiv="content-type" content="application/x-www-form-urlencoded"-->
+	<!--meta contentType="application/x-www-form-urlencoded"-->
+  <title>Rss from web </title>
+  <link rel="stylesheet" href="{{static_url("bulma.min.css")}}" />
+  <link rel="stylesheet" href="{{static_url("rss-from-web.css")}}" />
+
+  <!--link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" /-->
+
+  <link rel="stylesheet" href="{{static_url("font-awesome.min.css")}}" />
+
+  <!--link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"-->
+  <!--link rel="stylesheet" href="/static/css/bulma-divider.min.css"-->
+
+  <style>
+    nav.navbar {
+      height: 6rem !important;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+    }
+  </style>
+</head>
+
+
+<body>
+  <!-- START NAV -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <a  class="navbar-item is-active is-size-5 has-text-weight-semibold" href={{home_uri}}>
+				 <h1 class="title">Rss from web</h1>
+        </a>
+        <span class="navbar-burger burger" data-target="navbarMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </div>
+      <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-end">
+      </div>
+      </div>
+    </div>              
+
+  </nav>              
+
+  <!-- END NAV -->
+
+  <!-- input css -->
+  <section class="section">
+    <div class="columns">
+      <div class="column is-10 is-offset-1">
+        <div class="container has-text-centered is-fluid">
+          <div class="hero-body">
+
+            <h2 class="title is-4">Input web css for rss</h1>
+
+            <div class="column is-6 is-offset-3">
+
+			<form method="post" action="{{request_uri}}" >
+
+              <div class="field">
+
+                <label class="label has-text-left" >site url</label>
+                <div class="control">
+                  <input class="input" name="site_url" type="text" placeholder="e.g: https://www.sanzhou.com" >
+                </div>
+
+                <label class="label has-text-left">entry css</label>
+                <div class="control">
+                  <input class="input" name="entry_css" type="text" placeholder="e.g: //h2/a ">
+                </div>
+
+                <label class="label has-text-left">entry link css</label>
+                <div class="control">
+                  <input class="input" name="entry_link_css" type="text" placeholder="e.g: //h2/a ">
+                </div>
+
+                <label class="label has-text-left">add base url</label>
+                <div class="control">
+                  <input class="input" name="add_base_url" type="text" placeholder="e.g: True or False ">
+                </div>
+
+                <!--label class="label has-text-left">rss link prefix</label-->
+                <div class="control">
+                  <input class="input" name="rss_link_prefix"  value="{{home_uri}}" type="hidden" placeholder="e.g: https://sanzhou.live/rss-from-web/ ">
+                </div>
+
+                <label class="label has-text-left">site title css</label>
+                <div class="control">
+                  <input class="input" name="site_title_css" type="text" placeholder="e.g: //title ">
+                </div>
+
+                <label class="label has-text-left">site motto css</label>
+                <div class="control">
+                  <input class="input" name="site_motto_css" type="text" placeholder="e.g:  //header/div/div/div[1]/h1">
+                </div>
+
+                <label class="label has-text-left">entry content css</label>
+                <div class="control">
+                  <input class="input" name="entry_content_css" type="text" placeholder="e.g: //article/div/div ">
+                </div>
+
+                <label class="label has-text-left">author css</label>
+                <div class="control">
+                  <input class="input" name="author_css" type="text" placeholder="e.g:  //header/div/div/div[1]/div/a/span[2] ">
+                </div>
+
+                <label class="label has-text-left">datetime css</label>
+                <div class="control">
+                  <input class="input" name="datetime_css" type="text" placeholder="e.g:  //article/div/header/div/span[1]/time">
+                </div>
+
+              </div>
+
+              <div class="control">
+                <button class="button is-primary" name="save" type="submit" value="save">save</button>
+                <button class="button is-primary" name="dry_run_list" type="submit" formtarget="_blank" value="dry_run_list">dry run(get entry list)</button>
+                <!--button class="button is-primary" name="dry_run_content" type="submit" formtarget="_blank" value="dry_run_content">dry run(get one entry)</button-->
+              </div>
+              {% raw xsrf_form_html() %}
+
+</from>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong></strong>       
+			</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
