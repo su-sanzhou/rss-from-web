@@ -1,5 +1,8 @@
 as my huginn jobs as rss source always show as not working,so i write a rss source from web,replace huginn.
 the grab time interval can be configured ,in the config.py,the init value is 12 hours
+# 0.known bugs:
+ all kinds of css can not contain a space " ",or contain a single quote "'" or double quote '"' which is not belong 
+to the xpath format,such as "//title's tr" or "//title tr",must be "//titletr" 
 
 # 1.rss-from-web
 a web do not have a rss,this project can get a rss source from the web
