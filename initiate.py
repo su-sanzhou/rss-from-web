@@ -1,49 +1,7 @@
-from createsql import CreateTable
-from selectsql import SelectSql
 import datetime
 import hashlib
 import config
-import tornado.ioloop
 import psycopg2
-
-async def create_table(database):
-    create_table = CreateTable(database)
-
-    await create_table.create_user_table()
-    await create_table.create_xpath_table()
-    await create_table.creat_rss_table()
-
-async def insert_admin_user(database):
-
-    passwd = "password"
-    sha256 = hashlib.sha256()
-    sha256.update(passwd.encode('utf-8'))
-    passwd_sha = sha256.hexdigest()
-
-
-    insert_user = SelectSql(database)
-
-    conn = await insert_user.sql_conn()
-    res = await  conn.execute("""
-            INSERT INTO user (user_name,email,
-            password,phone,paid,cash,priviage,
-            verified,created_date,last_login) 
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)  
-           ""","admin","admin@test.com",passwd_sha,
-             "13810000000",0.0,0.0,"administrator",
-             False,datetime.datetime.now(),
-             datetime.datetime.now())
-
-    await  conn.close()
-
-    return res
-
-
-async def initiate():
-    database = config.get_database_config()
-    await create_table(database)
-    await insert_admin_user(database)
-
 
 def syncpg_connect(database):
     database = config.get_database_config()
@@ -75,7 +33,9 @@ def syncpg_create_user_table(cur):
         """)
     except:
         print("can not create db rss_user using psycopg2")
-    print(f"the rss_user isis {res}")
+    else:
+        print(f"create rss_user table success")
+
 
 def syncpg_create_xpath_table( cur):
     try:
@@ -94,12 +54,14 @@ def syncpg_create_xpath_table( cur):
                     author_css varchar NOT NULL,
                     datetime_css varchar NOT NULL,
                     interval_time bigint NOT NULL DEFAULT 30,
-                    rss_link varchar NOT NULL
+                    rss_link varchar NOT NULL,
+                    base_url varchar NOT NULL
                     );
         """)
     except:
         print("can not create db xpath using psycopg2")
-    print(f"the xpath isis {res}")
+    else:
+        print(f"create table xpath success")
 
 def syncpg_create_rss_table( cur):
     try:
@@ -116,7 +78,8 @@ def syncpg_create_rss_table( cur):
         """)
     except:
         print("can not create db rss using psycopg2")
-    print(f"the rss isis {res}")
+    else:
+        print("create table rss success")
 
 def syncopg_insert_admin_user(cur):
 
@@ -137,7 +100,8 @@ def syncopg_insert_admin_user(cur):
              datetime.datetime.now()))
     except:
         print("there some wong when insert admin")
-    print(f"the rss isis {res}")
+    else:
+        print("init admin user success")
 
 
 

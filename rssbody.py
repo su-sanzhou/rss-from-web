@@ -32,33 +32,42 @@ class RssBody(object):
             # just want to use EntryLink.get_http_body
             entry_link = EntryLink(link,self.entry_content_css,
                             self.author_css, False,
-                            "nothing","nothing","nothing")
+                            "nothing","nothing","nothing","base_url")
             http_body = await entry_link.get_http_body(link)
 
             if entry_link.status["status_http_body"] != self.do_success:
-                self.status["status_rss_body"] = f"Can not get http body from {link} in rssbody.py"
+                temp_entry_link = {"entry": entry, "link": link,
+                                   "entry_content": " ",
+                                   "author": " ",
+                                   "datetime": " ",
+                                   "guid": f'Guid("{link}")'}
+                self.rss_body.append(temp_entry_link)
+                entry_link.all_status = self.do_success
+                self.all_status = self.do_success
 
-            #file = open("douban.html","w")
-            #file.write(http_body)
-            #file.close()
+            else:
+
+                #file = open("douban.html","w")
+                #file.write(http_body)
+                #file.close()
 
 
-            http_html = lhtml.fromstring(http_body)
+                http_html = lhtml.fromstring(http_body)
 
-            #if not http_html:
-            #    print(f"there are no contents in http_html:{http_html}")
+                #if not http_html:
+                #    print(f"there are no contents in http_html:{http_html}")
 
-            entry_content = await self.get_entry_content(http_html,
-                                                   self.entry_content_css)
-            author = await  self.get_rss_author(http_html, self.author_css)
-            datetime = await  self.get_rss_datetime(http_html, self.datetime_css)
+                entry_content = await self.get_entry_content(http_html,
+                                                       self.entry_content_css)
+                author = await  self.get_rss_author(http_html, self.author_css)
+                datetime = await  self.get_rss_datetime(http_html, self.datetime_css)
 
-            temp_entry_link = {"entry": entry, "link": link,
-                               "entry_content": entry_content,
-                               "author": author,
-                               "datetime": datetime,
-                               "guid": f'Guid("{link}")'}
-            self.rss_body.append(temp_entry_link)
+                temp_entry_link = {"entry": entry, "link": link,
+                                   "entry_content": entry_content,
+                                   "author": author,
+                                   "datetime": datetime,
+                                   "guid": f'Guid("{link}")'}
+                self.rss_body.append(temp_entry_link)
 
     async def get_entry_content(self, http_html,entry_content_css):
         #print(f"the entry_conten_css is:{entry_content_css}")

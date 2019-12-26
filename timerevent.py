@@ -55,7 +55,8 @@ class TimerEvent(object):
                                xpath["add_base_url"],
                                xpath["rss_link_prefix"],
                                xpath["site_title_css"],
-                               xpath["site_motto_css"])
+                               xpath["site_motto_css"],
+                               xpath["base_url"])
         await entry_link.start() #get entry_and_link,stored in entry_link
 
         rss_body = RssBody(entry_link.entry_and_link,

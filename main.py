@@ -137,6 +137,7 @@ class AddrssHandler(RequestHandler):
         entry_content_css = self.get_body_argument("entry_content_css")
         author_css = self.get_body_argument("author_css")
         datetime_css = self.get_body_argument("datetime_css")
+        base_url = self.get_body_argument("base_url")
         #print(f"the entry_content_css is:{self.get_body_argument('entry_content_css')}")
 
         if self.get_arguments('dry_run_list'):
@@ -156,7 +157,7 @@ class AddrssHandler(RequestHandler):
                                entry_link_css,add_base_url,
                                absolute_uri_prefix,
                                site_title_css,
-                               site_motto_css)
+                               site_motto_css,base_url)
         try:
             await entry_link.start()
         except:
@@ -197,12 +198,13 @@ class AddrssHandler(RequestHandler):
 
         rss_sql = RssSql()
         res_xpath = await rss_sql.insert_xpath(int(user_id),site_url,
-                             entry_css,entry_link_css,
+                                   entry_css,entry_link_css,
                                    add_base_url,absolute_uri_prefix,
                                    site_title_css,site_motto_css,
                                    entry_content_css,author_css,
                                    datetime_css,refresh_interval,
-                                   entry_link.other_for_rss["rss_link"])
+                                   entry_link.other_for_rss["rss_link"],
+                                   base_url)
         xpath_id = res_xpath["xpath_id"]
 
         sha256 = hashlib.sha256()
@@ -308,18 +310,19 @@ class UpdaterssHandler(RequestHandler):
             self.redirect(self.reverse_url("login"))
             return
 
-        site_url = escape.xhtml_escape(self.get_body_argument("site_url"))
-        entry_css = escape.xhtml_escape(self.get_body_argument("entry_css"))
-        entry_link_css = escape.xhtml_escape(self.get_body_argument("entry_link_css"))
-        add_base_url = escape.xhtml_escape(self.get_body_argument("add_base_url"))
-        site_title_css = escape.xhtml_escape(self.get_body_argument("site_title_css"))
-        site_motto_css = escape.xhtml_escape(self.get_body_argument("site_motto_css"))
-        entry_content_css = escape.xhtml_escape(self.get_body_argument("entry_content_css"))
-        author_css = escape.xhtml_escape(self.get_body_argument("author_css"))
-        datetime_css = escape.xhtml_escape(self.get_body_argument("datetime_css"))
-        interval_time = float(escape.xhtml_escape(self.get_body_argument("interval_time"))) * 60 * 60
+        site_url = self.get_body_argument("site_url")
+        entry_css = self.get_body_argument("entry_css")
+        entry_link_css = self.get_body_argument("entry_link_css")
+        add_base_url = self.get_body_argument("add_base_url")
+        site_title_css = self.get_body_argument("site_title_css")
+        site_motto_css = self.get_body_argument("site_motto_css")
+        entry_content_css = self.get_body_argument("entry_content_css")
+        author_css = self.get_body_argument("author_css")
+        datetime_css = self.get_body_argument("datetime_css")
+        interval_time = float(self.get_body_argument("interval_time")) * 60 * 60
         interval_time = int(interval_time)
         rss_link = escape.xhtml_escape(self.get_body_argument("rss_link"))
+        base_url = self.get_body_argument("base_url")
 
         if str.lower(add_base_url) == "true":
             add_base_url = True
@@ -331,7 +334,7 @@ class UpdaterssHandler(RequestHandler):
                                                      entry_link_css,add_base_url,
                                                      site_title_css,site_motto_css,entry_content_css,
                                                      author_css,datetime_css,interval_time,
-                                                     rss_link)
+                                                     rss_link,base_url)
         await self.render("update_status.html",res = int(res["xpath_id"]),request_uri = home_uri)
 
 

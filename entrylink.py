@@ -7,7 +7,7 @@ import random
 class EntryLink(object):
     def __init__(self,site_url,entry_css,entry_link_css,
                  add_base_url,rss_link_prefix,
-                 site_title_css,site_motto_css):
+                 site_title_css,site_motto_css,base_url):
         self.site_url = site_url
         self.entry_css = entry_css
         self.entry_link_css = entry_link_css
@@ -17,6 +17,7 @@ class EntryLink(object):
         self.site_motto_css = site_motto_css
         self.entry_and_link = {}
         self.other_for_rss = {}
+        self.base_url = base_url
         self.do_success = "do_success"
         self.do_not_success = "do_not_success"
         self.status = {"status_http_body": self.do_success,
@@ -109,8 +110,11 @@ class EntryLink(object):
         html = etree.HTML(http_body)
         site_title = html.xpath(site_title_css)
         if not site_title:
-            print(f"there are no site_tile")
-            self.other_for_rss["site_title"] = "no_site_title"
+            if "/" not in site_title:
+                self.other_for_rss["site_title"] = site_title_css
+            else:
+                print(f"there are no site_tile")
+                self.other_for_rss["site_title"] = "no_site_title"
         else:
             self.other_for_rss["site_title"] = site_title[0].text
 
@@ -146,7 +150,7 @@ class EntryLink(object):
                                                       self.entry_css,
                                                       self.entry_link_css,
                                                       self.add_base_url,
-                                                      self.site_url)
+                                                      self.base_url)
             await self.get_other(http_body,self.rss_link_prefix,
                        self.site_url,self.site_title_css,self.site_motto_css)
 

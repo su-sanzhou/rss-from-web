@@ -33,7 +33,8 @@ class RssSql(object):
                      author_css,
                      datetime_css,
                      interval_time,
-                     rss_link):
+                     rss_link,
+                     base_url):
 
         conn = await self.select_sql.sql_conn()
         res = await conn.fetchrow("""
@@ -41,13 +42,13 @@ class RssSql(object):
                 entry_css,entry_link_css,add_base_url,
                 rss_link_prefix,site_title_css,site_motto_css,
                 entry_content_css,author_css,datetime_css,
-                interval_time,rss_link)
-                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+                interval_time,rss_link,base_url)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
                 RETURNING xpath_id;
         """,user_id,site_url,entry_css,entry_link_css,
                  add_base_url,rss_link_prefix,
                  site_title_css,site_motto_css,entry_content_css,
-                 author_css,datetime_css,interval_time,rss_link)
+                 author_css,datetime_css,interval_time,rss_link,base_url)
         await conn.close()
         return res
 
@@ -118,7 +119,8 @@ class RssSql(object):
                                              author_css,
                                              datetime_css,
                                              interval_time,
-                                             rss_link
+                                             rss_link,
+                                             base_url
                                              ):
 
         conn = await self.select_sql.sql_conn()
@@ -126,11 +128,12 @@ class RssSql(object):
                 UPDATE xpath SET site_url = $1,
                 entry_css = $2,entry_link_css = $3,add_base_url = $4,
                 site_title_css = $5,site_motto_css = $6,entry_content_css = $7,
-                author_css = $8,datetime_css = $9,interval_time = $10
-                WHERE  rss_link = $11  RETURNING xpath_id     
+                author_css = $8,datetime_css = $9,interval_time = $10,
+                base_url = $11
+                WHERE  rss_link = $12  RETURNING xpath_id     
                """,site_url,entry_css,entry_link_css,add_base_url,
                    site_title_css,site_motto_css,entry_content_css,
-                   author_css,datetime_css,interval_time,
+                   author_css,datetime_css,interval_time,base_url,
                    rss_link)
 
         await conn.close()
