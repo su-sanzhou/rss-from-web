@@ -1,0 +1,102 @@
+<p>as my huginn jobs as rss source always show as not working,so i write a rss source from web,replace huginn.
+the grab time interval can be configured ,in the config.py,the init value is 12 hours</p>
+
+<h1>0.known bugs:</h1>
+
+<p>all kinds of css can not contain a space " ",or contain a single quote "'" or double quote '"' which is not belong 
+to the xpath format,such as "//title's tr" or "//title tr",must be "//titletr" </p>
+
+<h1>1.rss-from-web</h1>
+
+<p>a web do not have a rss,this project can get a rss source from the web</p>
+
+<h1>2.prerequiste</h1>
+
+<ul>
+<li>ubuntu 18.04
+<code>
+lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 18.04.3 LTS
+Release:    18.04
+Codename:   bionic
+</code></li>
+<li>ubuntu user:ubuntu</li>
+<li>python3.6
+<code>
+python --version
+Python 3.6.9
+</code></li>
+<li>pip3 
+<code>
+pip --version
+pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
+</code></li>
+</ul>
+
+<h1>3.install</h1>
+
+<h2>3.1 install command</h2>
+
+<p><code>
+pip3 install -r requirements.txt
+pip3 install git+https://github.com/Supervisor/supervisor
+sudo apt-get install postgresql postgresql-server libpsql
+cd 
+git clone https://github.com/su-sanzhou/rss-from-web.git
+sudo cp -rv rss-from-web /var
+sudo chown -R ubuntu rss-from-web
+sudo chgrp -R ubuntu rss-from-web
+</code></p>
+
+<h2>3.2 config postgresql</h2>
+
+<ul>
+<li>create user ubuntu for postgresql </li>
+<li>create database rss<em>from</em>web</li>
+<li>setup the password as "password" for user ubuntu when accessing database rss<em>from</em>web</li>
+</ul>
+
+<h1>4.run</h1>
+
+<p><code>
+cd /var/rss-from-web/
+supervisord -c supervisor/supervisord.conf
+lsof -i | grep python
+</code>
+if you see listen 8000,congratulations,it's working
+visit "http://localhost:8000/rss-from-web",input user_name:admin and password:password
+you will see the home page,it looks like this:
+<img src="https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_001.png" alt="image" /></p>
+
+<h1>5.usage</h1>
+
+<p>click the "Add a rss" on the right up corner,then you could add something like this:
+<img src="https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_002.png" alt="image" /></p>
+
+<p>you can copy all the xpath css here:
+```
+https://sanzhou.live/</p>
+
+<p>//section/article/header/h1/a</p>
+
+<p>//section/article/header/h1/a</p>
+
+<p>False</p>
+
+<p>//header/div/div[1]/div/a/span[2]</p>
+
+<p>//header/div/div[1]/p</p>
+
+<p>//article</p>
+
+<p>//header/div/div[1]/div/a/span[2]</p>
+
+<p>//article/header/div/span[1]/time
+```</p>
+
+<p>then click the save button,you will see the rss source,like this:
+<img src="https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_003.png" alt="image" /></p>
+
+<p>then you can use your rss reader subscribe it.</p>
