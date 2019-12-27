@@ -1,11 +1,19 @@
-as my huginn jobs as rss source always show as not working,so i write a rss source from web,replace huginn.
+Because my huginn jobs as rss source always show as not working,so i write a rss source from web,replace huginn.
 the grab time interval can be configured ,in the config.py,the init value is 12 hours
-# 0.known bugs:
- all kinds of css can not contain a space " ",or contain a single quote "'" or double quote '"' which is not belong 
-to the xpath format,such as "//title's tr" or "//title tr",must be "//titletr" 
+# 0.known bugs
+All kinds of css can not contain only a single quote ' or only a double quote " which is not belong to the xpath format,such as "//title's tr" or "//title tr",must be "//titletr" 
 
-# 1.rss-from-web
-a web do not have a rss,this project can get a rss source from the web
+these bugs exist because lxml can not handle these situation
+# 1.how it works
+If a web do not have a rss,this project can get a rss source from the web
+
+This project based on tornado and postgresql,after login,tornado shows you a html page which can be used to input the rss contents xpath css,after click save,the tornaodo will fetch the web contents use the "site_url",then get the articl title and article hyperlink,then tornado fetch every article from the article hyperlink,and generated a rss file.
+
+I use postgresql stored the rss file's contents and its hyperlink,you can subscribe the rss  using the hyper link.
+ 
+Every time interval in the config.py,tornado will regenerate the rss through the above process.
+
+All process in tornado is async.
 # 2.prerequiste
 - ubuntu 18.04
 ```

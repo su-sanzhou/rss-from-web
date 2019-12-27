@@ -140,6 +140,19 @@ class AddrssHandler(RequestHandler):
         base_url = self.get_body_argument("base_url")
         #print(f"the entry_content_css is:{self.get_body_argument('entry_content_css')}")
 
+        #xpath css can not contain space " "
+        site_url = site_url.replace(" ","")
+        entry_css = entry_css.replace(" ","")
+        entry_link_css = entry_link_css.replace(" ","")
+        add_base_url = add_base_url.replace(" ","")
+        site_title_css = site_title_css.replace(" ","")
+        site_motto_css = site_motto_css.replace(" ","")
+        entry_content_css = entry_content_css.replace(" ","")
+        author_css = author_css.replace(" ","")
+        datetime_css = datetime_css.replace(" ","")
+        base_url = base_url.replace(" ","")
+
+
         if self.get_arguments('dry_run_list'):
             save_button = "dry_run_list"
         elif self.get_arguments('save'):
