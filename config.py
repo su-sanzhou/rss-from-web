@@ -29,6 +29,8 @@ def get_other_config():
         #the url prefix when visit the rss
         "absolute_uri_prefix": "http://localhost:8000/rss-from-web/",
         "rss_site_uri": "http://localost:8000/",
-        "refresh_interval": 12 * 60 #minutes
+        "refresh_interval": 12 * 60, #minutes
+        "log_file": "/var/rss-from-web/rfw.log",
+
     }
     return other_settings

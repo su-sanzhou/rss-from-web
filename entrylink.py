@@ -3,6 +3,7 @@ from lxml import etree
 from urllib.parse import urlparse
 import string
 import random
+from rsslog import RssLog
 
 class EntryLink(object):
     def __init__(self,site_url,entry_css,entry_link_css,
@@ -25,6 +26,7 @@ class EntryLink(object):
                        "status_entry_link": self.do_success,
                        "status_entry_and_entry_link": self.do_success}
         self.all_status = self.do_success
+        self.rss_logger = RssLog()
 
 
     async def get_http_body(self,site_url):
@@ -39,13 +41,14 @@ class EntryLink(object):
             response = await http_client.fetch(http_request)
         except Exception as e:
             #add it as a log later
-            print(f"can not get content from site_url:{site_url}")
-            print(f"Error: {e}")
             status_http_body = f"can not get content from site_url:{site_url},the Error is{e}"
+            self.rss_logger.rss_logger.info(status_http_body)
+
             self.status["status_http_body"] = status_http_body
         else:
             if not response:
-                print(f"there is no content in site_url:{site_url}")
+                log_info = f"there is no content in site_url:{site_url}"
+                self.rss_logger.rss_logger.info(log_info)
             return response.body.decode()
 
     async def get_entry_and_link(self,body,entry_css,entry_link_css,
@@ -57,7 +60,8 @@ class EntryLink(object):
         entry_and_link = {}
         if len(entrys) != len(entry_links):
             #add to log later
-            print(f"the wrong title css or wrong link css")
+            log_info = f"the wrong title css or wrong link css"
+            self.rss_logger.rss_logger.info(log_info)
             self.status["status_entry_and_entry_link"] = f"the wrong title css or wrong link css"
         else:
             for i in range(len(entrys)):
@@ -67,7 +71,8 @@ class EntryLink(object):
     async def get_entry(self,html,entry_css):
         entrys = html.xpath(entry_css)
         if not entrys:
-            print(f"there are no contents in entrys: {entrys}")
+            log_info = f"there are no contents in entrys: {entrys}"
+            self.rss_logger.rss_logger.info(log_info)
             self.status["status_entry"] = f"Can not get entry from {entry_css}"
 
         entry_list = []
@@ -80,14 +85,16 @@ class EntryLink(object):
     async def get_entry_link(self,html,entry_link_css,add_base_url,base_url):
         entry_links = html.xpath(entry_link_css)
         if not entry_links:
-            print(f"there are no contents in entry_links: {entry_links}")
+            log_info = f"there are no contents in entry_links: {entry_links}"
+            self.rss_logger.rss_logger.info(log_info)
             self.status["status_entry_link"] = f"Can not get entry link from {entry_link_css}"
         entry_link_list = []
 
         for entry_link in entry_links:
             href = entry_link.attrib["href"]
             if not href:
-                print(f"there are no href in {href}")
+                log_info = f"there are no href in {href}"
+                self.rss_logger.rss_logger.info(log_info)
                 self.status["status_entry_link"] = f"Can not get the href attr from the {entry_link_css}"
             if add_base_url:
                 base_and_href = base_url + href
@@ -97,7 +104,8 @@ class EntryLink(object):
                 elif "https://" in base_url:
                     add_http_or_https_url = undup_base_and_href.replace("https:/","https://")
                 else:
-                    print("something wrong hanppened when get the url")
+                    log_info = "something wrong hanppened when get the url"
+                    self.rss_logger.rss_logger.info(log_info)
                     self.status["status_entry_link"] = f"Something wrong happened when add base url:{base_url}"
                 entry_link_list.append(add_http_or_https_url)
             else:
@@ -109,14 +117,16 @@ class EntryLink(object):
                   site_title_css,site_motto_css):
         html = etree.HTML(http_body)
         site_title = html.xpath(site_title_css)
-        if not site_title:
+        if len(site_title) == 0:
             if "/" not in site_title:
                 self.other_for_rss["site_title"] = site_title_css
             else:
-                print(f"there are no site_tile")
+                log_info = f"there are no site_tile"
+                self.rss_logger.rss_logger.info(log_info)
                 self.other_for_rss["site_title"] = "no_site_title"
         else:
             self.other_for_rss["site_title"] = site_title[0].text
+
 
         site_motto = html.xpath(site_motto_css)
         if not site_motto:
@@ -126,7 +136,8 @@ class EntryLink(object):
 
         parse_url = urlparse(site_url)
         if not parse_url:
-            print(f"there are no contents in parse_url: {parse_url}")
+            log_info = f"there are no contents in parse_url: {parse_url}"
+            self.rss_logger.rss_logger.info(log_info)
         domain = '{uri.netloc}'.format(uri = parse_url)
         domain = domain.split(".")
 
