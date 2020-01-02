@@ -58,7 +58,7 @@ supervisord -c supervisor/supervisord.conf
 lsof -i | grep python
 ```
 if you see listen 8000,congratulations,it's working
-visit "http://localhost:8000/rss-from-web",input user_name:admin and password:password
+visit "http://localhost:8000/rss-from-web" ,input user_name:admin and password:password
 you will see the home page,it looks like this:
 ![image](https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_001.png)
 
@@ -91,4 +91,14 @@ then click the save button,you will see the rss source,like this:
 ![image](https://github.com/su-sanzhou/rss-from-web/blob/master/screen/Selection_003.png)
 
 then you can use your rss reader subscribe it.
+# 6.todo
+- fix the **only one** single or double quotes  in the xpath css
+- fix the error when generate rss from the next web
 
+```
+```
+- add the tornado log ,so that can debug easily
+- add the xpath error to the browser when the some error happened
+- add to the pypi library ,so that install easily
+- construct a good document page
+- reform the index.html,so that it looks more suitable
