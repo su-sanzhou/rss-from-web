@@ -96,6 +96,8 @@ then you can use your rss reader subscribe it.
 - fix the error when generate rss from the next web
 
 ```
+https://bookdown.org/baydap/papasdiary/
+http://fishandhappiness.blogspot.com/
 ```
 - add the tornado log ,so that can debug easily
 - add the xpath error to the browser when the some error happened
