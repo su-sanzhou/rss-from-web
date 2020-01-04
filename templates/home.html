@@ -29,30 +29,27 @@
   <script src="{{static_url("jquery-3.4.1.min.js")}}"></script>
   <script src="{{static_url("jquery_cookie.js")}}"></script>
   <script>
-  $(document).ready(function(){
-    $(".delete_rss").click(function(){
-       $(this).parent().parent().hide();
-       $.ajaxSettings.async = false;
-       $.post("{{ request_uri }}delete_rss",
-         {url_name: $(this).parent().prev().attr("href"),
-          _xsrf: Cookies.get("_xsrf")},
-         function(data,status){
-            if(data == "do_success"){
-             console.log("come success");
-             //$(this).parent().parent().hide();
-           }
-           else{
-             console.log("come faileue")
-             alert("do not delete success!");
-           }
-         }
-       );
-       }
-    );
-
-
-
-  });
+$(document).ready(function(){
+$(".delete_rss").click(function(){
+$(this).parent().parent().parent().parent().hide();
+$.ajaxSettings.async = false;
+$.post("{{request_uri}}delete_rss",
+{url_name: $(this).parent().parent().parent().prev().find("a:first").attr("href"),
+_xsrf: Cookies.get("_xsrf")},
+function(data,status){
+if(data == "do_success"){
+console.log("come success");
+//$(this).parent().parent().hide();
+}
+else{
+console.log("come faileue")
+alert("do not delete success!");
+}
+}
+);
+}
+);
+});
   </script>
 </head>
 
@@ -93,48 +90,73 @@
 
               <div class="field">
                 {% for item in rss %}
+                  <nav class = "level">
                     {% if item["site_title"] == "rss_is_none" %}
                       <label class="label has-text-left" >
 					     There is no one rss item now!
                       </label>
                     {% elif  item["site_title"] == "no_site_title" %}
+                      <div class="level-left">
+                      <div class="level-item">
                       <label class="label has-text-left" >
                         <a href="{{item['rss_url_name']}}"  target="_blank">{{item["rss_url_name"]}}</a>
+                      </label>
+                      </div>
+                      </div>
+
+                      <div class = "level-right">
+                        <div class="level-item">
                         <div class="button is-primary is-small is-rounded">
                           <label class="delete_rss" >
                             Delete
                           </label>
                         </div>
-                        <div class="button is-primary is-small is-rounded">
-                        <form method="post" action="{{ request_uri }}edit_rss" target="_blank">
-                            <input class="input" type="hidden"  name="url_name" value="{{item['rss_url_name']}}">
-                              <button class="button is-primary is-small is-rounded">
-                               Edit
-                              </button>
-                            {% raw xsrf_form_html() %}
-                        </form>
-                        </div>
-                     </label>
-                    {% else %}
-                     <label class="label has-text-left" >
-                        <a href="{{item['rss_url_name']}}" target="_blank">{{item["site_title"]}}</a>
-                        <div class="button is-primary is-small is-rounded">
-                          <label class="delete_rss" >
-                            Delete
-                          </label>
-                        </div>
-                        <div class="button is-primary is-small is-rounded">
-                        <form method="post" action="{{ request_uri }}edit_rss" target="_blank">
-                            <input class="input" type="hidden"  name="url_name" value="{{item['rss_url_name']}}">
-                              <button class="button is-primary is-small is-rounded">
-                               Edit
-                              </button>
-                            {% raw xsrf_form_html() %}
-                        </form>
                         </div>
 
-                    </label>
+                        <div class="level-item">
+                        <div class="button is-primary is-small is-rounded">
+                        <form method="post" action="{{ request_uri }}edit_rss" target="_blank">
+                            <input class="input" type="hidden"  name="url_name" value="{{item['rss_url_name']}}">
+                              <button class="button is-primary is-small is-rounded">
+                               Edit
+                              </button>
+                            {% raw xsrf_form_html() %}
+                        </form>
+                        </div>
+                        </div>
+                      </div>
+                    {% else %}
+                     <div class="level-left">
+                     <div class="level-item">
+                     <label class="label has-text-left" >
+                        <a href="{{item['rss_url_name']}}" target="_blank">{{item["site_title"]}}</a>
+                     </label>
+                     </div>
+                     </div>
+
+                      <div class = "level-right">
+                        <div class="level-item">
+                        <div class="button is-primary is-small is-rounded">
+                          <label class="delete_rss" >
+                            Delete
+                          </label>
+                        </div>
+                        </div>
+
+                        <div class="level-item">
+                        <div class="button is-primary is-small is-rounded">
+                        <form method="post" action="{{ request_uri }}edit_rss" target="_blank">
+                            <input class="input" type="hidden"  name="url_name" value="{{item['rss_url_name']}}">
+                              <button class="button is-primary is-small is-rounded">
+                               Edit
+                              </button>
+                            {% raw xsrf_form_html() %}
+                        </form>
+                        </div>
+                        </div>
+                      </div>
                     {% end %}
+                  </nav>
               {% end %}
             </div>
         </div>

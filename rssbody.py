@@ -20,10 +20,8 @@ class RssBody(object):
         self.rss_logger = RssLog()
 
     async def get_rss_body(self):
-        print("1")
         for entry in self.entry_and_link:
             link = self.entry_and_link[entry]
-            print("2")
             entry_link = EntryLink(link,self.entry_content_css,
                             self.author_css, False,
                             "nothing","nothing","nothing","base_url")
@@ -39,25 +37,18 @@ class RssBody(object):
                 self.rss_body.append(temp_entry_link)
                 entry_link.all_status = self.do_success
                 self.all_status = self.do_success
-                print("3")
             else:
-                print("4")
                 http_html = etree.HTML(http_body)
-                print("5")
                 entry_content = await self.get_entry_content(http_html,
                                                        self.entry_content_css)
-                print("6")
                 author = await  self.get_rss_author(http_html, self.author_css)
-                print("7")
                 datetime = await  self.get_rss_datetime(http_html, self.datetime_css)
-                print("8")
                 temp_entry_link = {"entry": entry, "link": link,
                                    "entry_content": entry_content,
                                    "author": author,
                                    "datetime": datetime,
                                    "guid": f'Guid("{link}")'}
                 self.rss_body.append(temp_entry_link)
-                print("9")
 
     async def get_entry_content(self, http_html,entry_content_css):
         entry_contents = http_html.xpath(entry_content_css)
