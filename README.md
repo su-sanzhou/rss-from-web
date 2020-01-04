@@ -93,7 +93,7 @@ then click the save button,you will see the rss source,like this:
 then you can use your rss reader subscribe it.
 # 6.todo
 - fix the **only one** single or double quotes  in the xpath css
-- fix the error when generate rss from the next web
+- ~~fix the error when generate rss from the next web~~
 
 ```
 https://bookdown.org/baydap/papasdiary/
