@@ -70,7 +70,7 @@ class EntryLink(object):
 
     async def get_entry(self,html,entry_css):
         entrys = html.xpath(entry_css)
-        if not entrys:
+        if len(entrys) == 0:
             log_info = f"there are no contents in entrys: {entrys}"
             self.rss_logger.rss_logger.info(log_info)
             self.status["status_entry"] = f"Can not get entry from {entry_css}"
@@ -78,13 +78,12 @@ class EntryLink(object):
         entry_list = []
 
         for entry in entrys:
-            entry_list.append(entry.text)
-
+            entry_list.append(etree.tostring(entry, method="text", encoding="utf-8").decode(encoding="utf-8"))
         return entry_list
 
     async def get_entry_link(self,html,entry_link_css,add_base_url,base_url):
         entry_links = html.xpath(entry_link_css)
-        if not entry_links:
+        if len(entry_links) == 0:
             log_info = f"there are no contents in entry_links: {entry_links}"
             self.rss_logger.rss_logger.info(log_info)
             self.status["status_entry_link"] = f"Can not get entry link from {entry_link_css}"
@@ -118,38 +117,44 @@ class EntryLink(object):
         html = etree.HTML(http_body)
         site_title = html.xpath(site_title_css)
         if len(site_title) == 0:
-            if "/" not in site_title:
+            if "/" not in site_title_css:
                 self.other_for_rss["site_title"] = site_title_css
             else:
                 log_info = f"there are no site_tile"
                 self.rss_logger.rss_logger.info(log_info)
                 self.other_for_rss["site_title"] = "no_site_title"
         else:
-            self.other_for_rss["site_title"] = site_title[0].text
-
+            res = etree.tostring(site_title[0], method="text", encoding="utf-8").decode(encoding="utf-8")
+            self.other_for_rss["site_title"] = res
 
         site_motto = html.xpath(site_motto_css)
-        if not site_motto:
-            self.other_for_rss["site_motto"] = " "
+        if len(site_motto) == 0:
+            if "/" not in site_motto_css:
+                self.other_for_rss["site_motto"] = site_motto_css
+            else:
+                self.other_for_rss["site_motto"] = " "
         else:
-            self.other_for_rss["site_motto"] = site_motto[0].text
-
-        parse_url = urlparse(site_url)
-        if not parse_url:
-            log_info = f"there are no contents in parse_url: {parse_url}"
-            self.rss_logger.rss_logger.info(log_info)
-        domain = '{uri.netloc}'.format(uri = parse_url)
-        domain = domain.split(".")
+            res = etree.tostring(site_motto[0], method="text", encoding="utf-8").decode(encoding="utf-8")
+            self.other_for_rss["site_motto"] = res
+#        parse_url = urlparse(site_url)
+#        if not parse_url:
+#            log_info = f"there are no contents in parse_url: {parse_url}"
+#            self.rss_logger.rss_logger.info(log_info)
+#        domain = '{uri.netloc}'.format(uri = parse_url)
+#        domain = domain.split(".")
+        domain = site_url.replace("/","")
+        domain = domain.replace("http:","")
+        domain = domain.replace("https:","")
+        domain = domain.replace("www","")
+        domain = domain.replace(".","")
 
         rand_str = ''.join(random.sample(string.ascii_letters + string.digits,30))
 
-        if len(domain) >= 2:
-            self.other_for_rss["rss_link"] = rss_link_prefix +\
-                                             domain[-2] + rand_str + ".rss"
-        else:
-            self.other_for_rss["rss_link"] = rss_link_prefix + \
-                                             domain[-1]\
-                                             + rand_str + ".rss"
+        #if len(domain) >= 2:
+        #    self.other_for_rss["rss_link"] = rss_link_prefix +\
+        #                                     domain[-2] + rand_str + ".rss"
+        #else:
+        self.other_for_rss["rss_link"] = rss_link_prefix + domain + rand_str + ".rss"
 
 
     async def start(self):
