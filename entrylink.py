@@ -1,5 +1,6 @@
 from tornado import httpclient as hc
 from lxml import etree
+from lxml import objectify
 from urllib.parse import urlparse
 import string
 import random
@@ -53,10 +54,21 @@ class EntryLink(object):
 
     async def get_entry_and_link(self,body,entry_css,entry_link_css,
                            add_base_url,base_url):
-        html = etree.HTML(body)
+        #html = etree.HTML(body)
+        #html = etree.XML(body)
+        parser = etree.XMLParser(recover=True, ns_clean=True)
+        xml = etree.fromstring(body.encode(), parser)
+        tree = etree.ElementTree(xml)
+        html = tree.getroot()
+        for elem in html.getiterator():
+            if not hasattr(elem.tag, 'find'): continue
+            i = elem.tag.find('}')
+            if i >= 0:
+                elem.tag = elem.tag[i + 1:]
+        objectify.deannotate(html, cleanup_namespaces=True)
+
         entrys = await self.get_entry(html,entry_css)
         entry_links = await  self.get_entry_link(html,entry_link_css,add_base_url,base_url)
-
         entry_and_link = {}
         if len(entrys) != len(entry_links):
             #add to log later
@@ -114,7 +126,20 @@ class EntryLink(object):
 
     async def get_other(self,http_body,rss_link_prefix,site_url,
                   site_title_css,site_motto_css):
-        html = etree.HTML(http_body)
+        #html = etree.HTML(http_body)
+        #html = etree.XML(http_body)
+
+        parser = etree.XMLParser(recover=True, ns_clean=True)
+        xml = etree.fromstring(http_body.encode(), parser)
+        tree = etree.ElementTree(xml)
+        html = tree.getroot()
+        for elem in html.getiterator():
+            if not hasattr(elem.tag, 'find'): continue
+            i = elem.tag.find('}')
+            if i >= 0:
+                elem.tag = elem.tag[i + 1:]
+        objectify.deannotate(html, cleanup_namespaces=True)
+
         site_title = html.xpath(site_title_css)
         if len(site_title) == 0:
             if "/" not in site_title_css:
@@ -169,7 +194,6 @@ class EntryLink(object):
                                                       self.base_url)
             await self.get_other(http_body,self.rss_link_prefix,
                        self.site_url,self.site_title_css,self.site_motto_css)
-
             if self.status["status_entry"] != self.do_success \
                 or self.status["status_entry_link"] != self.do_success \
                 or self.status["status_entry_and_entry_link"] != self.do_success:

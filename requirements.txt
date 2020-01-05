@@ -3,3 +3,4 @@ psycopg2
 lxml
 asyncpg
 aiopg
+rfeed

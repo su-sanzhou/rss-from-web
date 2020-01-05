@@ -38,15 +38,18 @@ pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
 # 3.install
 ## 3.1 install command 
 ```
-pip3 install -r requirements.txt
-pip3 install git+https://github.com/Supervisor/supervisor
-sudo apt-get install postgresql postgresql-server libpsql
+p3 install git+https://github.com/Supervisor/supervisor
+sudo apt-get install postgresql libpq5 postgresql-contrib postgresql-server-dev-10
 cd 
 git clone https://github.com/su-sanzhou/rss-from-web.git
 sudo cp -rv rss-from-web /var
 sudo chown -R ubuntu rss-from-web
 sudo chgrp -R ubuntu rss-from-web
+cd /var/rss-from-web
+pip3 install -r requirements.txt
+
 ```
+
 ## 3.2 config postgresql
 - create user ubuntu for postgresql 
 - create database rss_from_web
@@ -99,8 +102,9 @@ then you can use your rss reader subscribe it.
 https://bookdown.org/baydap/papasdiary/
 http://fishandhappiness.blogspot.com/
 ```
-- add the tornado log ,so that can debug easily
+- ~~add the tornado log(in fact,add the python log) ,so that can debug easily~~
 - add the xpath error to the browser when the some error happened
 - add to the pypi library ,so that install easily
 - construct a good document page
-- reform the index.html,so that it looks more suitable
+- ~~reform the index.html,so that it looks more suitable~~
+- ~~add the exist feed or rss entrance,so that can add an exist feed or rss to the database~~
